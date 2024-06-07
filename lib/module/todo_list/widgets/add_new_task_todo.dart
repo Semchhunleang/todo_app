@@ -71,8 +71,6 @@ class AddNewTaskTodo extends StatelessWidget {
                   .currentState!
                   .validate()) {
                 if (!getIt<TodoListController>().isEdit.value) {
-                  debugPrint(
-                      "-----add ${getIt<TodoListController>().taskLabel.value}");
                   final newTask = TasksModel(
                     id: DateTime.now().millisecondsSinceEpoch.toString(),
                     taskLabel: getIt<TodoListController>().taskLabel.value,
@@ -80,7 +78,12 @@ class AddNewTaskTodo extends StatelessWidget {
                   if (getIt<TodoListController>().taskLabel.value.isNotEmpty) {
                     getIt<TodoListController>()
                         .addTaskToCategory(category.title, newTask);
-                    EasyLoading.showSuccess("Add task Success");
+                    if (getIt<TodoListController>().isExisting.value) {
+                      EasyLoading.showError("This task is existing");
+                    } else {
+                      EasyLoading.showSuccess("Add task Success");
+                      Navigator.of(context).pop();
+                    }
                     getIt<TodoListController>().onClearTask();
                   }
                 } else {
@@ -94,10 +97,9 @@ class AddNewTaskTodo extends StatelessWidget {
                     getIt<TodoListController>()
                         .updateTaskInCategory(category.title, newTask);
                     EasyLoading.showSuccess("Update task Success");
+                    Navigator.of(context).pop();
                   }
                 }
-
-                Navigator.of(context).pop();
               }
             },
             child: Text(

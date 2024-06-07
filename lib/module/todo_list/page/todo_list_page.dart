@@ -57,51 +57,53 @@ class TodoListPage extends StatelessWidget {
               ? Padding(
                   padding: const EdgeInsets.only(
                       top: padding, left: padding, right: padding),
-                  child: Column(
-                      children: tasks.asMap().entries.map((e) {
-                    return CustomCardTaskTodo(
-                      label: e.value.taskLabel,
-                      isComplete: e.value.isCompleted,
-                      onTapComplete: () {
-                        getIt<TodoListController>()
-                            .onMarkComplete(category.title, e.key);
-                        if (e.value.isCompleted) {
-                          EasyLoading.showSuccess("Task is completed");
-                        }
-                      },
-                      onTapMore: () {
-                        onShowBottomSheet(
-                          context: context,
-                          height: MediaQuery.of(context).size.height * 0.23,
-                          title: 'Done',
-                          child: ShowMoreWidget(
-                            onTapDelete: () {
-                              getIt<TodoListController>()
-                                  .deleteTaskFromCategory(
-                                      category.title, e.key);
-                              Navigator.pop(context);
-                            },
-                            onTapEdit: () {
-                              getIt<TodoListController>().isEdit.value = true;
-                              Navigator.pop(context);
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AddNewTaskTodo(
-                                    category: category,
-                                    tasks: e.value,
-                                  );
-                                },
-                              );
-                              //Navigator.pop(context);
-                              // getIt<TodoListController>().updateTaskInCategory(
-                              //     category.title, e.value);
-                            },
-                          ),
-                        );
-                      },
-                    );
-                  }).toList()),
+                  child: SingleChildScrollView(
+                    child: Column(
+                        children: tasks.asMap().entries.map((e) {
+                      return CustomCardTaskTodo(
+                        label: e.value.taskLabel,
+                        isComplete: e.value.isCompleted,
+                        onTapComplete: () {
+                          getIt<TodoListController>()
+                              .onMarkComplete(category.title, e.key);
+                          if (e.value.isCompleted) {
+                            EasyLoading.showSuccess("Task is completed");
+                          }
+                        },
+                        onTapMore: () {
+                          onShowBottomSheet(
+                            context: context,
+                            height: MediaQuery.of(context).size.height * 0.23,
+                            title: 'Done',
+                            child: ShowMoreWidget(
+                              onTapDelete: () {
+                                getIt<TodoListController>()
+                                    .deleteTaskFromCategory(
+                                        category.title, e.key);
+                                Navigator.pop(context);
+                              },
+                              onTapEdit: () {
+                                getIt<TodoListController>().isEdit.value = true;
+                                Navigator.pop(context);
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AddNewTaskTodo(
+                                      category: category,
+                                      tasks: e.value,
+                                    );
+                                  },
+                                );
+                                //Navigator.pop(context);
+                                // getIt<TodoListController>().updateTaskInCategory(
+                                //     category.title, e.value);
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    }).toList()),
+                  ),
                 )
               : const EmptyStateWidget(
                   description: 'No task todo, please add your task',

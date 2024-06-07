@@ -91,7 +91,7 @@ class HomePage extends StatelessWidget {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Obx(() {
-          return getIt<TodoListController>().deleting.value
+          return getIt<TodoListController>().isDeleting.value
               ? SizedBox(
                   width: 56.0,
                   height: 56.0,

@@ -17,7 +17,8 @@ class TodoListController extends GetxController {
   final GlobalKey<FormState> formKeyTask = GlobalKey<FormState>();
   final validationErrorCategory = false.obs;
   final isEdit = false.obs;
-  final deleting = false.obs;
+  final isDeleting = false.obs;
+  final isExisting = false.obs;
 
   //*************** Add category todo ***********/
   void addCategory(CategoryModel category) {
@@ -30,6 +31,11 @@ class TodoListController extends GetxController {
         todoCategoryList.indexWhere((cat) => cat.title == categoryName);
     if (categoryIndex != -1) {
       var updatedCategory = todoCategoryList[categoryIndex];
+      // Check for duplicate task label
+      if (updatedCategory.taskList.any((t) => t.taskLabel == task.taskLabel)) {
+        isExisting(true);
+        return; // Stop execution
+      }
       updatedCategory.taskList = List.from(updatedCategory.taskList)
         ..add(task); // Create a new list and add the task
       todoCategoryList[categoryIndex] =
@@ -83,7 +89,7 @@ class TodoListController extends GetxController {
 
   //*************** change delete category ***********/
   void changeDeleting(bool value) {
-    deleting.value = value;
+    isDeleting.value = value;
   }
 
 //*************** delete category ***********/
@@ -114,5 +120,6 @@ class TodoListController extends GetxController {
   onClearTask() {
     categoryTitle.value = "";
     isEdit(false);
+    isExisting(false);
   }
 }
