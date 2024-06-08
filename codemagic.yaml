@@ -1,0 +1,41 @@
+workflows:
+  my_flutter_workflow:
+    name: Flutter Workflow
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Install dependencies
+        script: |
+          flutter pub get
+      - name: Run tests
+        script: |
+          flutter test
+      - name: Build APK
+        script: |
+          flutter build apk --release
+      - name: Build iOS
+        script: |
+          flutter build ios --release --no-codesign
+      - name: Unit tests
+        script: | 
+          mkdir -p test-results
+          flutter test --machine > test-results/flutter.json
+        test_report: test-results/flutter.json
+      - name: Integration tests
+         script: | 
+          mkdir -p test-results 
+          flutter -d emulator-5554 test --machine > test-results/flutter.json integration_test 
+          # for iOS use: -d iPhone
+    test_report: test-results/flutter.json
+      - build/**/outputs/**/*.apk
+      - build/ios/iphoneos/**/*.ipa
+    publishing:
+      email:
+        recipients:
+          - your.email@example.com
+        notify:
+          on_success: true
+          on_failure: true
