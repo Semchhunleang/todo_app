@@ -7,16 +7,18 @@ BoxDecoration boxShadowDecoration({
   double spreadRadius = 1.0,
   double blurRadius = 10.0,
   Color backgroundColor = Colors.white,
+  List<BoxShadow>? boxShadow,
 }) {
   return BoxDecoration(
     color: backgroundColor,
     borderRadius: BorderRadius.circular(borderRadius),
-    boxShadow: [
-      BoxShadow(
-        color: shadowColor.withOpacity(0.2),
-        spreadRadius: spreadRadius,
-        blurRadius: blurRadius,
-      ),
-    ],
+    boxShadow: boxShadow ??
+        [
+          BoxShadow(
+            color: shadowColor.withOpacity(0.2),
+            spreadRadius: spreadRadius,
+            blurRadius: blurRadius,
+          ),
+        ],
   );
 }

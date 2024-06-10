@@ -5,6 +5,7 @@ import 'package:to_do_list_app/constrant/constrants.dart';
 import 'package:to_do_list_app/module/todo_list/data/model/category/category_model.dart';
 
 import '../../../../core/service_locator/service_locator.dart';
+import '../../../../utils/widgets/custom_appbar.dart';
 import '../../../todo_list/logic/todo_list_controller.dart';
 import '../../../todo_list/page/todo_list_page.dart';
 import '../../../todo_list/widgets/custom_button_add_category.dart';
@@ -16,15 +17,12 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Lists",
-            style: Theme.of(context)
-                .textTheme
-                .headlineLarge!
-                .copyWith(fontWeight: FontWeight.w600),
-          ),
-        ),
+        appBar: customAppBar(
+            context: context,
+            title: "Lists",
+            isLeading: false,
+            backgroundColor: Colors.white,
+            titleColor: Colors.black),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: padding),
           child: Column(

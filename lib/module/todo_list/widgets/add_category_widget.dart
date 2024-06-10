@@ -78,8 +78,20 @@ class AddCategoryWidget extends StatelessWidget {
                                           .value ==
                                       e.key
                                   ? AppColor.primaryColor
-                                  : Colors.grey.shade300,
-                              borderRadius: 20.0),
+                                  : Colors.transparent,
+                              borderRadius: 20.0,
+                              boxShadow: getIt<TodoListController>()
+                                          .selectedIconIndex
+                                          .value ==
+                                      e.key
+                                  ? [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        spreadRadius: 1.0,
+                                        blurRadius: 10.0,
+                                      )
+                                    ]
+                                  : []),
                           child: getIt<TodoListController>()
                                       .selectedIconIndex
                                       .value ==

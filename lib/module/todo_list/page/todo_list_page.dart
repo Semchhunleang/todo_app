@@ -11,6 +11,7 @@ import '../data/model/category/category_model.dart';
 import '../logic/todo_list_controller.dart';
 import '../widgets/add_new_task_todo.dart';
 import '../widgets/custom_card_task_todo.dart';
+import '../widgets/delete_task.dart';
 import '../widgets/show_more_widget.dart';
 
 class TodoListPage extends StatelessWidget {
@@ -77,10 +78,16 @@ class TodoListPage extends StatelessWidget {
                             title: 'Done',
                             child: ShowMoreWidget(
                               onTapDelete: () {
-                                getIt<TodoListController>()
-                                    .deleteTaskFromCategory(
-                                        category.title, e.key);
                                 Navigator.pop(context);
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return DeleteTask(
+                                      index: e.key,
+                                      titleCategory: category.title,
+                                    );
+                                  },
+                                );
                               },
                               onTapEdit: () {
                                 getIt<TodoListController>().isEdit.value = true;
