@@ -25,6 +25,7 @@ class AddCategoryWidget extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       color: AppColor.textColor,
                     ),
+                autofocus: true,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: InputDecoration(
                   hintText: 'Enter category title',
@@ -115,6 +116,7 @@ class AddCategoryWidget extends StatelessWidget {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
+              getIt<TodoListController>().onClearCategory();
             },
             child: const Text('Cancel'),
           ),
@@ -135,10 +137,6 @@ class AddCategoryWidget extends StatelessWidget {
                       title: getIt<TodoListController>().categoryTitle.value));
                   getIt<TodoListController>().onClearCategory();
                 }
-                // getIt<TodoListController>().todoCategoryList.add(CategoryModel(
-                //     icon: getIt<TodoListController>().iconPath.value,
-                //     title: getIt<TodoListController>().categoryTitle.value));
-                // getIt<TodoListController>().onClearCategory();
 
                 Navigator.of(context).pop();
               }
