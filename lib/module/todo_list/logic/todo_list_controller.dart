@@ -142,14 +142,27 @@ class TodoListController extends GetxController {
   }
 
   //*************** Save categories to local storage ***********/
-  void saveCategories() {
-    final encodedData =
-        todoCategoryList.map((category) => category.toJson()).toList();
-    storage.write('todoCategoryList', jsonEncode(encodedData));
+  Future<void> saveCategories() async {
+    try {
+      final storage = GetStorage();
+      final jsonData = storage.read<List<dynamic>>(
+          'todoCategoryList'); // Specify the data type explicitly
+      if (jsonData != null) {
+        todoCategoryList = jsonData
+            .map((categoryJson) => CategoryModel.fromJson(categoryJson))
+            .toList();
+        update();
+      }
+    } catch (e) {
+      print('Error loading categories: $e');
+    }
+    // final encodedData =
+    //     todoCategoryList.map((category) => category.toJson()).toList();
+    // await storage.write('todoCategoryList', jsonEncode(encodedData));
   }
 
   //*************** Load categories from local storage ***********/
-  void loadCategories() {
+  Future<void> loadCategories() async {
     final storedData = storage.read('todoCategoryList');
     if (storedData != null) {
       final List<dynamic> decodedData = jsonDecode(storedData);

@@ -1,15 +1,33 @@
 // test/todo_controller_test.dart
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:to_do_list_app/module/todo_list/data/model/category/category_model.dart';
 import 'package:to_do_list_app/module/todo_list/data/model/tasks/tasks_model.dart';
 import 'package:to_do_list_app/module/todo_list/logic/todo_list_controller.dart';
+
+import 'mock.dart';
 
 void main() {
   group('TodoController', () {
     late TodoListController todoListController;
 
-    setUp(() {
+    setUpAll(() async {
+      // Ensure bindings are initialized
+      TestWidgetsFlutterBinding.ensureInitialized();
+
+      // Set up the mock for path_provider
+      await setupMockPathProvider();
+
+      // Initialize GetStorage after setting up the mock
+      await GetStorage.init();
+    });
+
+    setUp(() async {
+      // Clear storage before each test to ensure a clean state
+      final storage = GetStorage();
+      await storage.erase();
+
       todoListController = TodoListController();
       Get.put(todoListController);
     });
