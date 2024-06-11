@@ -10,7 +10,6 @@ This Flutter app is a simple todo list manager designed to help users keep track
 - **Edit Task**: Users can edit task details such as title, description, due date, etc.
 - **Delete Task**: Users can remove tasks from the list when they are completed or no longer needed.
 - **Mark as Completed**: Users can mark tasks as completed to keep track of their progress.
-- **Priority**: Tasks can be assigned different priority levels to organize them effectively.
 
 ## Screenshots
 **1. Category**
