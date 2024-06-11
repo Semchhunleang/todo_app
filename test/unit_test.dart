@@ -58,8 +58,7 @@ void main() {
 
       expect(todoListController.todoCategoryList.first.taskList.length,
           1); // Should still be 1
-      expect(
-          todoListController.isExisting.value, true); // Duplicate task detected
+      expect(todoListController.isExisting, true); // Duplicate task detected
     });
   });
 }
