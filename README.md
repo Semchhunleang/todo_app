@@ -50,6 +50,10 @@ This Flutter app is a simple todo list manager designed to help users keep track
     <img src="readme_asset/completed_task.png" alt="Screenshot 1" width="200" />
 </div>
 
+## Continuous Integration (CI) Server
+This Todo App is use [[Codemagic](https://blog.codemagic.io/getting-started-with-codemagic/)] to deploy App to a continuous integration (CI) server. 
+    <img src="readme_asset/ci-cd.png" alt="Screenshot 1" width="800" />
+
 ## Installation
 1. Clone the repository from [[GitHub link](https://github.com/Semchhunleang/todo_app)].
 2. Navigate to the project directory.
