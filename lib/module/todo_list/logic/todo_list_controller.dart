@@ -1,31 +1,40 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:injectable/injectable.dart';
+import 'package:get_storage/get_storage.dart';
+import 'dart:convert';
+import 'package:to_do_list_app/module/todo_list/data/model/category/category_model.dart';
 import 'package:to_do_list_app/module/todo_list/data/model/tasks/tasks_model.dart';
 import '../../../constrant/image_asset.dart';
-import '../data/model/category/category_model.dart';
 
 class TodoListController extends GetxController {
-  @factoryMethod
-  static init() => Get.put(TodoListController());
-  final selectedIconIndex = 0.obs;
-  final todoCategoryList = <CategoryModel>[].obs;
-  final categoryTitle = "".obs;
-  final taskLabel = "".obs;
-  final iconPath = ImageAsset.task.obs;
+  final storage = GetStorage();
+
+  int selectedIconIndex = 0;
+  List<CategoryModel> todoCategoryList = [];
+  String categoryTitle = "";
+  String taskLabel = "";
+  String iconPath = ImageAsset.task;
   final GlobalKey<FormState> formKeyCategory = GlobalKey<FormState>();
   final GlobalKey<FormState> formKeyTask = GlobalKey<FormState>();
-  final validationErrorCategory = false.obs;
-  final isEdit = false.obs;
-  final isDeleting = false.obs;
-  final isExisting = false.obs;
+  bool validationErrorCategory = false;
+  bool isEdit = false;
+  bool isDeleting = false;
+  bool isExisting = false;
+
+  @override
+  void onInit() {
+    super.onInit();
+    loadCategories();
+  }
 
   //*************** Add category todo ***********/
   void addCategory(CategoryModel category) {
     todoCategoryList.add(category);
+    saveCategories();
+    update();
   }
 
-//*************** Add task todo ***********/
+  //*************** Add task todo ***********/
   void addTaskToCategory(String categoryName, TasksModel task) {
     final categoryIndex =
         todoCategoryList.indexWhere((cat) => cat.title == categoryName);
@@ -33,19 +42,20 @@ class TodoListController extends GetxController {
       var updatedCategory = todoCategoryList[categoryIndex];
       // Check for duplicate task label
       if (updatedCategory.taskList.any((t) => t.taskLabel == task.taskLabel)) {
-        isExisting(true);
+        isExisting = true;
+        update();
         return; // Stop execution
       }
       updatedCategory.taskList = List.from(updatedCategory.taskList)
         ..add(task); // Create a new list and add the task
       todoCategoryList[categoryIndex] =
-          updatedCategory; // Update the category in the observable list
-      todoCategoryList.refresh(); // Refresh the list to update UI
+          updatedCategory; // Update the category in the list
+      saveCategories();
+      update(); // Refresh the list to update UI
     }
   }
 
   // *************** update task todo ***********/
-
   void updateTaskInCategory(String categoryName, TasksModel updatedTask) {
     final categoryIndex =
         todoCategoryList.indexWhere((cat) => cat.title == categoryName);
@@ -57,7 +67,8 @@ class TodoListController extends GetxController {
       if (taskIndex != -1) {
         category.taskList[taskIndex] = updatedTask;
         todoCategoryList[categoryIndex] = category;
-        todoCategoryList.refresh();
+        saveCategories();
+        update();
       }
     }
   }
@@ -70,12 +81,13 @@ class TodoListController extends GetxController {
       var category = todoCategoryList[categoryIndex];
       category.taskList.removeAt(index);
       todoCategoryList[categoryIndex] = category;
-      todoCategoryList.refresh();
+      saveCategories();
+      update();
     }
   }
 
   // *************** Mark item as complete and incomplete ***********/
-  onMarkComplete(String categoryName, int index) {
+  void onMarkComplete(String categoryName, int index) {
     final categoryIndex =
         todoCategoryList.indexWhere((cat) => cat.title == categoryName);
     if (categoryIndex != -1) {
@@ -83,18 +95,22 @@ class TodoListController extends GetxController {
       updatedCategory.taskList[index].isCompleted =
           !updatedCategory.taskList[index].isCompleted;
       todoCategoryList[categoryIndex] = updatedCategory;
-      todoCategoryList.refresh(); // Refresh the list to update UI
+      saveCategories();
+      update(); // Refresh the list to update UI
     }
   }
 
   //*************** change delete category ***********/
   void changeDeleting(bool value) {
-    isDeleting.value = value;
+    isDeleting = value;
+    update();
   }
 
-//*************** delete category ***********/
+  //*************** delete category ***********/
   void deleteCategory(CategoryModel category) {
     todoCategoryList.remove(category);
+    saveCategories();
+    update();
   }
 
   //*************** List of icon ***********/
@@ -110,16 +126,36 @@ class TodoListController extends GetxController {
   ];
 
   //*************** Clear category data ***********/
-  onClearCategory() {
-    selectedIconIndex.value = 0;
-    categoryTitle.value = "";
-    iconPath.value = ImageAsset.task;
+  void onClearCategory() {
+    selectedIconIndex = 0;
+    categoryTitle = "";
+    iconPath = ImageAsset.task;
+    update();
   }
 
-  //*************** Clear category data ***********/
-  onClearTask() {
-    categoryTitle.value = "";
-    isEdit(false);
-    isExisting(false);
+  //*************** Clear task data ***********/
+  void onClearTask() {
+    categoryTitle = "";
+    isEdit = false;
+    isExisting = false;
+    update();
+  }
+
+  //*************** Save categories to local storage ***********/
+  void saveCategories() {
+    final encodedData =
+        todoCategoryList.map((category) => category.toJson()).toList();
+    storage.write('todoCategoryList', jsonEncode(encodedData));
+  }
+
+  //*************** Load categories from local storage ***********/
+  void loadCategories() {
+    final storedData = storage.read('todoCategoryList');
+    if (storedData != null) {
+      final List<dynamic> decodedData = jsonDecode(storedData);
+      todoCategoryList =
+          decodedData.map((json) => CategoryModel.fromJson(json)).toList();
+      update();
+    }
   }
 }

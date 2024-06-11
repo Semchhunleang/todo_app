@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
+import 'package:to_do_list_app/core/extension.dart';
 
 import '../../../constrant/constrants.dart';
 import '../../../utils/properties_widget.dart';
@@ -14,10 +14,9 @@ class CustomCardCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var squareWidth = Get.width - 45.0;
     return Container(
-      width: squareWidth / 2,
-      height: (squareWidth / 2) / 1.3,
+      width: square(context) / (isIpad(context) ? 3 : 2),
+      height: (square(context) / (isIpad(context) ? 3 : 2)) / 1.3,
       padding: const EdgeInsets.all(padding),
       decoration: boxShadowDecoration(),
       child: Column(
@@ -25,8 +24,8 @@ class CustomCardCategory extends StatelessWidget {
         children: [
           SvgPicture.asset(
             categoryModel.icon,
-            width: 25.0,
-            height: 25.0,
+            width: 19.0.sp,
+            height: 19.0.sp,
             // colorFilter: const ColorFilter.mode(
             //   Colors.red,
             //   BlendMode.srcIn,

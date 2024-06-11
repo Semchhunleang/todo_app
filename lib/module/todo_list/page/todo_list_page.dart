@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:to_do_list_app/constrant/constrants.dart';
+import '../../../constrant/constrants.dart';
 import '../../../constrant/image_asset.dart';
-import '../../../core/service_locator/service_locator.dart';
 import '../../../utils/widgets/custom_appbar.dart';
 import '../../../utils/widgets/custom_showmodal_bottomsheet.dart';
 import '../../../utils/widgets/empty_state_widget.dart';
@@ -20,38 +19,41 @@ class TodoListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TodoListController controller = Get.find<TodoListController>();
+
     return Scaffold(
-        appBar: customAppBar(
-          context: context,
-          title: category.title,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          actions: [
-            TextButton(
-                onPressed: () {
-                  getIt<TodoListController>().isEdit(false);
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AddNewTaskTodo(
-                        category: category,
-                      );
-                    },
+      appBar: customAppBar(
+        context: context,
+        title: category.title,
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        actions: [
+          TextButton(
+            onPressed: () {
+              controller.isEdit = false;
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AddNewTaskTodo(
+                    category: category,
                   );
                 },
-                child: Text(
-                  "Add",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: Colors.white),
-                ))
-          ],
-        ),
-        body: Obx(() {
-          final tasks = getIt<TodoListController>()
-              .todoCategoryList
+              );
+            },
+            child: Text(
+              "Add",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+      body: GetBuilder<TodoListController>(
+        builder: (controller) {
+          final tasks = controller.todoCategoryList
               .firstWhere((cat) => cat.id == category.id)
               .taskList;
           return tasks.isNotEmpty
@@ -65,8 +67,7 @@ class TodoListPage extends StatelessWidget {
                         label: e.value.taskLabel,
                         isComplete: e.value.isCompleted,
                         onTapComplete: () {
-                          getIt<TodoListController>()
-                              .onMarkComplete(category.title, e.key);
+                          controller.onMarkComplete(category.title, e.key);
                           if (e.value.isCompleted) {
                             EasyLoading.showSuccess("Task is completed");
                           }
@@ -90,7 +91,7 @@ class TodoListPage extends StatelessWidget {
                                 );
                               },
                               onTapEdit: () {
-                                getIt<TodoListController>().isEdit.value = true;
+                                controller.isEdit = true;
                                 Navigator.pop(context);
                                 showDialog(
                                   context: context,
@@ -101,9 +102,6 @@ class TodoListPage extends StatelessWidget {
                                     );
                                   },
                                 );
-                                //Navigator.pop(context);
-                                // getIt<TodoListController>().updateTaskInCategory(
-                                //     category.title, e.value);
                               },
                             ),
                           );
@@ -116,6 +114,8 @@ class TodoListPage extends StatelessWidget {
                   description: 'No task todo, please add your task',
                   imagePath: ImageAsset.emptyTask,
                 );
-        }));
+        },
+      ),
+    );
   }
 }

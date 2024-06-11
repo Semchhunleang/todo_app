@@ -10,6 +10,8 @@
 	<string>Todo App</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>We need access to the Documents folder to store app data.</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
