@@ -5,6 +5,7 @@ import 'package:to_do_list_app/module/todo_list/data/model/category/category_mod
 import 'package:to_do_list_app/module/todo_list/data/model/tasks/tasks_model.dart';
 
 import '../../../constrant/app_color.dart';
+import '../../../constrant/constrants.dart';
 import '../logic/todo_list_controller.dart';
 
 class AddNewTaskTodo extends StatelessWidget {
@@ -21,41 +22,44 @@ class AddNewTaskTodo extends StatelessWidget {
           child: AlertDialog(
             title:
                 Text(controller.isEdit ? 'Update task todo' : 'Add task todo'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: AppColor.textColor,
+            content: SizedBox(
+              width: width(context) * 0.8, // Set width to 80% of screen width
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: AppColor.textColor,
+                        ),
+                    autofocus: true,
+                    initialValue: tasks != null ? tasks!.taskLabel : "",
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: InputDecoration(
+                      hintText: 'Enter task todo',
+                      hintStyle: Theme.of(context).textTheme.bodyLarge,
+                      enabledBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
                       ),
-                  autofocus: true,
-                  initialValue: tasks != null ? tasks!.taskLabel : "",
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: InputDecoration(
-                    hintText: 'Enter task todo',
-                    hintStyle: Theme.of(context).textTheme.bodyLarge,
-                    enabledBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
+                      errorBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                      focusedErrorBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      ),
+                      errorStyle: const TextStyle(color: Colors.red),
                     ),
-                    errorBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red),
-                    ),
-                    focusedErrorBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red),
-                    ),
-                    errorStyle: const TextStyle(color: Colors.red),
+                    onChanged: (value) {
+                      controller.taskLabel = value;
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a todo task';
+                      }
+                      return null;
+                    },
                   ),
-                  onChanged: (value) {
-                    controller.taskLabel = value;
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a todo task';
-                    }
-                    return null;
-                  },
-                ),
-              ],
+                ],
+              ),
             ),
             actions: <Widget>[
               TextButton(
