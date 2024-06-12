@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_list_app/constrant/app_color.dart';
+import 'package:to_do_list_app/constrant/constrants.dart';
 
 import '../../../utils/properties_widget.dart';
 
@@ -39,13 +40,18 @@ class CustomCardTaskTodo extends StatelessWidget {
                       color: isComplete ? Colors.green : Colors.grey,
                     ),
                   ),
-                  Text(
-                    label == null ? "" : "$label",
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: AppColor.textColor,
-                        decoration:
-                            isComplete ? TextDecoration.lineThrough : null),
+                  SizedBox(
+                    width: width(context) * 0.65,
+                    child: Text(
+                      label == null ? "" : "$label",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.textColor,
+                          decoration:
+                              isComplete ? TextDecoration.lineThrough : null),
+                    ),
                   ),
                   const Spacer(),
                   IconButton(

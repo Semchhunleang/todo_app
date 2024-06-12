@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:to_do_list_app/core/extension.dart';
-
 import '../../../constrant/constrants.dart';
 import '../../../utils/properties_widget.dart';
 import '../data/model/category/category_model.dart';
@@ -15,8 +13,8 @@ class CustomCardCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: square(context) / (isIpad(context) ? 3 : 2),
-      height: (square(context) / (isIpad(context) ? 3 : 2)) / 1.3,
+      width: square(context) / 2,
+      height: (square(context) / 2) / 1.3,
       padding: const EdgeInsets.all(padding),
       decoration: boxShadowDecoration(),
       child: Column(
@@ -24,8 +22,8 @@ class CustomCardCategory extends StatelessWidget {
         children: [
           SvgPicture.asset(
             categoryModel.icon,
-            width: 19.0.sp,
-            height: 19.0.sp,
+            width: 25.0,
+            height: 25.0,
             // colorFilter: const ColorFilter.mode(
             //   Colors.red,
             //   BlendMode.srcIn,
@@ -37,6 +35,8 @@ class CustomCardCategory extends StatelessWidget {
           Text(
             categoryModel.title,
             style: Theme.of(context).textTheme.titleLarge,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
           Text(
             "$countItem Tasks",
